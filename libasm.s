@@ -1,2 +1,8 @@
-#https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
 
+
+.code
+ft_strlen proc
+	mov rax, 123
+	ret
+ft_strlen endp
+end
