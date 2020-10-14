@@ -1,3 +1,23 @@
+......THE GIST OF IT LOL.....
+for x64 assembly:
+rax - stores the return value
+rdi - contains the first argument of a function (destination)
+rsi - contains the second argument of a function (source)
+rdx - contains the third argument of a function
+rcx - 4th argument
+r8 - 5th
+r9 - 6th
+
+when calling a function with assembly, the output is stored in rax.
+
+rax = input
+[rax] = the address or pointer to rax's input.
+
+when moving through rdi or rsi you can use rax as an incrementer the way you would use str[i] with i incrementing:
+mov rax, 0
+mov dl, byte [dsi + rax]
+inc rax
+..........OLD NOTES........
 64-bit System V
 
 This is the default calling convention for 64-bit applications on many POSIX operating systems.
