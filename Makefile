@@ -3,53 +3,46 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: ybakker <ybakker@student.codam.nl>           +#+                      #
+#    By: nhariman <nhariman@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
-#    Created: 2020/07/15 13:21:09 by ybakker       #+#    #+#                  #
-#    Updated: 2020/10/12 12:25:31 by ybakker       ########   odam.nl          #
+#    Created: 2020/10/09 00:43:23 by nhariman      #+#    #+#                  #
+#    Updated: 2020/10/14 17:54:55 by nhariman      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libasm.a
+COMPILE = gcc
 
 FLAGS = -Wall -Werror -Wextra
-ifdef DEBUG
- FLAGS += -g -fsanitize=address
-endif
 
-SRC =	ft_strlen.s \
-		ft_strcpy.s \
+NASM =	ft_read.s \
 		ft_strcmp.s \
+		ft_strcpy.s \
 		ft_strdup.s \
-		ft_write.s \
-		ft_read.s \
+		ft_strlen.s \
+		ft_write.s
 
-OBJ = $(SRC:%.s=%.o)
+ONASM = 	$(NASM:.s=.o)
+
+NAME = libasm.a
 
 all: $(NAME)
 
-%.o : %.s
+$(NAME): $(ONASM)
+	ar rcs $@ $^
+
+%.o: %.s
 	nasm -fmacho64 $< -o $@
 
-$(NAME): $(OBJ)
-	ar -rcs $@ $^
-
 clean:
-	rm -rf $(NAME)
+	@$(RM) $(ONASM) asm_tester
 
 fclean: clean
-	rm -rf $(OBJ)
+	@$(RM) $(NAME)
 
 re: fclean all
 
-test: re
-	gcc -L . -lasm main.c -o test
-	./test
+bonus:
+	@echo "sorry nothing here"
 
-test2: re
-	gcc -L . -lasm main_mine.c -o test
-	./test
-
-test3: re
-	gcc -L . -lasm main2.c -o test
-	./test
+main: re
+	$(COMPILE) $(FLAGS) -L. -lasm main.c -o asm_tester

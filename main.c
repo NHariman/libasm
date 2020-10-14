@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 01:28:38 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/14 17:29:08 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/14 17:49:04 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,6 @@ void	test_read(void)
     int		readfd1;
     int		readfd2;
     int		readfd;
-    int		error_read;
     char	*buf;
 
 	blue();
@@ -195,35 +194,29 @@ void	test_read(void)
     printf("\ntest 1: normal test\n");
     readfd1 = open("ft_read.s", O_RDONLY);
     readfd2 = open("ft_read.s", O_RDONLY);
-
     readfd = read(readfd1, buf, 4);
     printf("   read:    read return: %d\n", readfd);
     readfd = ft_read(readfd2, buf, 4);
     printf("ft_read: ft_read return: %d\n", readfd);
-
     printf("\ntest 2: no real text\n");
     readfd = open("empty.txt", O_RDONLY);
     readfd = ft_read(readfd, buf, 4);
     printf("ft_read:    return read: %d\n", readfd);
     printf("   read: return ft_read: -1");
-
     printf("\n\ntest 3: long text\n");
     readfd = open("notes.txt", O_RDONLY);
     readfd1 = read(readfd, buf, 1000);
     printf("   read:    read return: %d\n", readfd);
     readfd2 = ft_read(readfd, buf, 1000);
     printf("ft_read: ft_read return: %d\n", readfd);
-
     printf("\n\ntest 3: errno1\n");
     char	buf1[21];
     char	buf2[21];
-    int	fd = open("empty.txt", O_RDONLY);
     int	a = read(333, buf1, 20);
     errno = 100;
     int b = ft_read(333, buf2, 20);
 	perror("ft_read errno");
     perror("   read errno");
-
     printf("\n\ntest 4: errno2\n");
     printf("return ft_read = %d\n", b);
     printf("return    read = %d\n", a);
@@ -235,7 +228,6 @@ void	test_write(void)
 	char *asem;
 	int count;
 	int fd;
-	int fd2;
 	blue();
 	printf("*****ft_write*******\n");
 	reset();
@@ -255,7 +247,6 @@ void	test_write(void)
 	reset();
 	printf("[SYS]: [%zi]\n", write(fd, sys, count));
 	printf("[ASM]: [%zi]\n", ft_write(fd, asem, count));
-
 
 	fd = 2;
 	blue();
@@ -292,22 +283,6 @@ void	test_write(void)
 	}
 }
 
-static void test_all_second(void)
-{
-	// strcmp
-
-	test_strcmp();
-	printf("\n");
-	// strcpy
-
-	test_strcpy();
-	printf("\n");
-	// strdup
-
-	test_strdup();
-	printf("\n");
-}
-
 void test_all(void)
 {
 	blue();
@@ -317,13 +292,20 @@ void test_all(void)
 	test_strlen();
 	printf("\n");
 	// write
-
 	test_write();
 	printf("\n");
 	// read
 	test_read();
 	printf("\n");
-	test_all_second();
+	// strcmp
+	test_strcmp();
+	printf("\n");
+	// strcpy
+	test_strcpy();
+	printf("\n");
+	// strdup
+	test_strdup();
+	printf("\n");
 }
 
 void	print_instructions(void)
@@ -332,7 +314,6 @@ void	print_instructions(void)
 	printf("commands:\n");
 	printf("all | strlen | read | strcmp | strcpy | strdup | write\n");
 }
-
 
 int		main(int argc, char **argv)
 {
@@ -357,7 +338,5 @@ int		main(int argc, char **argv)
 		printf("command not recognised\n");
 		print_instructions();
 	}
-	
-	
 	return (0);
 }
