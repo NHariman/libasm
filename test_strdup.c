@@ -6,13 +6,18 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/08 22:25:39 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/10 21:41:39 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/14 15:17:05 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libasm.h"
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
+#include <fcntl.h>
+#include "libasm.h"
 
 void blue(void)
 {
@@ -26,11 +31,6 @@ void reset(void)
 
 void	test_strdup(void)
 {
-	blue();
-	printf("NULL:\n");
-	reset();
-	printf("[SYS]: [%s]\n", strdup(NULL));
-	printf("[ASM]: [%s]\n", ft_strdup(NULL));
 	blue();
 	printf("\"\":\n");
 	reset();
@@ -51,4 +51,10 @@ void	test_strdup(void)
 	reset();
 	printf("[SYS]: [%s]\n", strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*%TY*HU(H&&%^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk"));
 	printf("[ASM]: [%s]\n", ft_strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*%TY*HU(H&&%^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk"));
+}
+
+int		main(void)
+{
+	test_strdup();
+	return (0);
 }

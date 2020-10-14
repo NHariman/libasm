@@ -6,13 +6,18 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/08 22:25:39 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/10 21:42:14 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/14 15:08:29 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libasm.h"
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
+#include <fcntl.h>
+#include "libasm.h"
 
 void blue(void)
 {
@@ -26,64 +31,53 @@ void reset(void)
 
 void	test_strcpy(void)
 {
+	char *str = malloc(30);
+
 	blue();
-	printf("s1: test:\n");
-	printf("s2: test:\n");
+	printf("str1 is malloced with size 30\n\n");
+	printf("s2: buff:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", "test"));
+	printf("[SYS]: [%s]\n", strcpy(str, "buff"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "buff"));
 	blue();
-	printf("s1: test:\n");
 	printf("s2: bink:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", "bink"));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", "bink"));
+	printf("[SYS]: [%s]\n", strcpy(str, "bink"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "bink"));
 	blue();
-	printf("s1: test:\n");
 	printf("s2: binkdffd:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", "binkdffd"));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", "binkdffd"));
+	printf("[SYS]: [%s]\n", strcpy(str, "binkdffd"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "binkdffd"));
 	blue();
-	printf("s1: notest:\n");
 	printf("s2: cat:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("notest", "cat"));
-	printf("[ASM]: [%s]\n", ft_strcpy("notest", "cat"));
+	printf("[SYS]: [%s]\n", strcpy(str, "cat"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "cat"));
 	blue();
-	printf("s1: test:\n");
-	printf("s2: NULL:\n");
-	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", NULL));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", NULL));
-	blue();
-	printf("s1: NULL:\n");
 	printf("s2: test:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy(NULL, "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy(NULL, "test"));
+	printf("[SYS]: [%s]\n", strcpy(str, "test"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "test"));
 	blue();
-	printf("s1: \"\":\n");
-	printf("s2: test:\n");
-	reset();
-	printf("[SYS]: [%s]\n", strcpy("", "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy("", "test"));
-	blue();
-	printf("s1: test:\n");
 	printf("s2: \"\":\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", ""));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", ""));
+	printf("[SYS]: [%s]\n", strcpy(str, ""));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, ""));
 	blue();
-	printf("s1: test:\n");
 	printf("s2: \"\\0\":\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("test", "\0"));
-	printf("[ASM]: [%s]\n", ft_strcpy("test", "\0"));
+	printf("[SYS]: [%s]\n", strcpy(str, "\0"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "\0"));
 	blue();
-	printf("s1: \"\\0\":\n");
 	printf("s2: test:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy("\0", "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy("\0", "test"));
+	printf("[SYS]: [%s]\n", strcpy(str, "test"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str, "test"));
+}
+
+int		main(void)
+{
+	test_strcpy();
+	return (0);
 }

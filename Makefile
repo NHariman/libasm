@@ -31,11 +31,11 @@ all: $(NAME)
 %.o : %.s
 	nasm -fmacho64 $< -o $@
 
-$(NAME): $(SRC)
+$(NAME): $(OBJ)
 	ar -rcs $@ $^
 
 clean:
-	rm -rf $(SRC)
+	rm -rf $(NAME)
 
 fclean: clean
 	rm -rf $(OBJ)

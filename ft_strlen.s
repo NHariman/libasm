@@ -1,4 +1,4 @@
-se§tion .text
+section .text
 	global _ft_strlen
 
 ; the function:

@@ -6,13 +6,19 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/08 22:25:39 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/10 21:28:21 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/14 14:18:55 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libasm.h"
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
+#include <fcntl.h>
+#include "libasm.h"
+
 
 void blue(void)
 {
@@ -26,11 +32,6 @@ void reset(void)
 
 void	test_strlen(void)
 {
-	blue();
-	printf("NULL:\n");
-	reset();
-	printf("[SYS]: [%i]\n", strlen(NULL));
-	printf("[ASM]: [%i]\n", ft_strlen(NULL));
 	blue();
 	printf("\"\":\n");
 	reset();
@@ -51,4 +52,10 @@ void	test_strlen(void)
 	reset();
 	printf("[SYS]: [%i]\n", strlen("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*%TY*HU(H&&%^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk"));
 	printf("[ASM]: [%i]\n", ft_strlen("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*%TY*HU(H&&%^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk"));
+}
+
+int	main(void)
+{
+	test_strlen();
+	return (0);
 }

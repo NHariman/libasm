@@ -6,13 +6,18 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/08 22:25:39 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/10 21:13:31 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/14 14:24:03 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libasm.h"
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
+#include <fcntl.h>
+#include "libasm.h"
 
 void blue(void)
 {
@@ -46,18 +51,6 @@ void test_strcmp(void)
 	printf("[SYS]: [%i]\n", strcmp("notest", "test"));
 	printf("[ASM]: [%i]\n", ft_strcmp("notest", "test"));
 	blue();
-	printf("s1: test:\n");
-	printf("s2: NULL:\n");
-	reset();
-	printf("[SYS]: [%i]\n", strcmp("test", NULL));
-	printf("[ASM]: [%i]\n", ft_strcmp("test", NULL));
-	blue();
-	printf("s1: NULL:\n");
-	printf("s2: test:\n");
-	reset();
-	printf("[SYS]: [%i]\n", strcmp(NULL, "test"));
-	printf("[ASM]: [%i]\n", ft_strcmp(NULL, "test"));
-	blue();
 	printf("s1: \"\":\n");
 	printf("s2: test:\n");
 	reset();
@@ -81,4 +74,10 @@ void test_strcmp(void)
 	reset();
 	printf("[SYS]: [%i]\n", strcmp("\0", "test"));
 	printf("[ASM]: [%i]\n", ft_strcmp("\0", "test"));
+}
+
+int		main(void)
+{
+	test_strcmp();
+	return (0);
 }
