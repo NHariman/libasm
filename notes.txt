@@ -1,32 +1,8 @@
-64-bit System V
-
-This is the default calling convention for 64-bit applications on many POSIX operating systems.
-Parameters
-
-The first eight scalar parameters are passed in (in order) RDI, RSI, RDX, RCX, R8, R9, R10, R11. Parameters past the first eight are placed on the stack, with earlier parameters closer to the top of the stack. The caller is responsible for popping these values off the stack after the call if no longer needed.
-Return Value
-
-For scalar return types, the return value is placed in RAX. Returning larger types like structures is done by conceptually changing the signature of the function to add a parameter at the beginning of the parameter list that is a pointer to a location in which to place the return value.
-Saved and Clobbered Registers
-
-RBP, RBX, and R12–R15 are preserved by the callee. All other registers may be modified by the callee, and the caller must preserve a register’s value itself (e.g. on the stack) if it wishes to use that value later.
-
 ; #https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
 
 BASIC INFO:
 REGISTERS:
 ; rax is a variable, anything you put into rax is the output in asm.
-
-for return values:
-rax, rbx, rcx
-rax is the return value if it's an int
-
-for input values:
-rdi, rsi, rdx, rcx, r8, R9
-^ arg 1, 2, 3, 4, 5, 6 respectively
-
-rdi = where it's located, the box.
-[rdi] what's IN the box
 
 ; GENERAL PURPOSE REGISTERS:
 ; AX, BX, CX, DX
