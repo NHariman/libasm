@@ -1,0 +1,843 @@
+......THE GIST OF IT LOL.....
+for x64 assembly:
+rax - stores the return value
+rdi - contains the first argument of a function (destination)
+rsi - contains the second argument of a function (source)
+rdx - contains the third argument of a function
+rcx - 4th argument
+r8 - 5th
+r9 - 6th
+
+when calling a function with assembly, the output is stored in rax.
+
+rax = input
+[rax] = the address or pointer to rax's input.
+
+when moving through rdi or rsi you can use rax as an incrementer the way you would use str[i] with i incrementing:
+mov rax, 0
+mov dl, byte [dsi + rax]
+inc rax
+..........OLD NOTES........
+64-bit System V
+
+This is the default calling convention for 64-bit applications on many POSIX operating systems.
+Parameters
+
+The first eight scalar parameters are passed in (in order) RDI, RSI, RDX, RCX, R8, R9, R10, R11. Parameters past the first eight are placed on the stack, with earlier parameters closer to the top of the stack. The caller is responsible for popping these values off the stack after the call if no longer needed.
+Return Value
+
+For scalar return types, the return value is placed in RAX. Returning larger types like structures is done by conceptually changing the signature of the function to add a parameter at the beginning of the parameter list that is a pointer to a location in which to place the return value.
+Saved and Clobbered Registers
+
+RBP, RBX, and R12–R15 are preserved by the callee. All other registers may be modified by the callee, and the caller must preserve a register’s value itself (e.g. on the stack) if it wishes to use that value later.
+
+; #https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+
+BASIC INFO:
+REGISTERS:
+; rax is a variable, anything you put into rax is the output in asm.
+
+for return values:
+rax, rbx, rcx
+rax is the return value if it's an int
+
+for input values:
+rdi, rsi, rdx, rcx, r8, R9
+^ arg 1, 2, 3, 4, 5, 6 respectively
+
+rdi = where it's located, the box.
+[rdi] what's IN the box
+
+; GENERAL PURPOSE REGISTERS:
+; AX, BX, CX, DX
+; they're used for whatever you want.
+; AX, DX are for implicit instructions like division usually
+; BX is used in microsoft cpp compiler for stuff, but not scratch.
+; BX needs to push and pop.
+; CX is a counter often, it will often be used in loops.
+; though you can do artithmatic with all of them.
+; you can also use 8bits, with high bits and low bits, 
+; format in: AH AL, BH BL, etc.
+
+; index registers are also general purpose
+; SI DI BP SP
+; SI: source index
+; DI: destination index
+; these are used for string operations and string searching and comparison.
+; these do not have byte versions.
+; BP: base pointer
+; SP: stack pointer
+; used for the stack and memory. controls local data. you don't use these for arithmatic.
+; usually operate in the background. use them as pointers.
+; IP: instruction pointer. points in RAM where the instructions are being read from.
+; NOT general purpose. call functions with it.
+
+; segment registers: used for paging and threading info.
+; CS DS ES SS
+; generally not used.
+
+; Flags Register
+; saves states of comparisons and other instructions so you can act on that statement.
+; ie. comparing two variables, and know if they're equal? check if they're equal and branch if they are or not.
+
+; altering ax registers can just be done on the stack
+; but fo bx you will need to push and pop as it expects the original value to be back before the function closes
+; push rbx
+; mov bx, 29
+; mov bh, 67
+; pop rbx
+; pushing and popping allows you to not change a value
+
+FUNDAMENTAL DATA TYPES
+; integer: byte, word, dword, qword
+; floating point: real4, real8, real10
+; SIMD pointer: xmmword, ymmword, zmmword
+; assembly is not type safe, it depends on the instructions you use
+; unsigned int: DIV and MUL for div and multiply
+; signed: IDIV and IMUL
+; ADD and SUB are the same
+
+; data type ranges:
+; byte: unsigned 0 to 255, unsigned -2^7 to 2^7
+; word: 16 bites, range 0 to 65535 unsigned and -12^15 to 2^15-1 signed
+; dword (double-word); size of an int.
+; qword (double-quad-word): long long
+
+; floating point data types:
+; real4: IEEE754 single precision float. 32 bits wide, 1 sign bit, 8 bit exponent, 23 bit mantissa.
+; real8: same as a double
+; real10: 80 bits wide, only used with x87 floating point unit.
+
+SIMD datatypes:
+xmmword: 128 bits
+ymmxword: 256 bits
+zmmword: 512 bits
+
+defining a byte:
+
+.data
+myByte db [value] < define byte
+myWord dw ? ; use ? if you don't care what the value is set to. < define word.
+
+byte ptr => can specify the value of whatever ptr is pointing to into a register.
+
+ie. 
+.code
+function proc
+	mov al, byte ptr [myByte]/myByte
+
+	ret 
+function endp
+end
+
+using db under a .code block allows you to use machine code within the function.
+
+********MOV and LEA**********
+
+MOV is the most fundamental instruction, it takes two operands of the same size and moves (actually copies) the data from the source operand to the destination.
+
+ie.
+mov dest, src
+
+mov does not change the flag register.
+you can use mov to move from a register into memory and from memory into a register. BUT you can't use two memory operands.
+abilities:
+- move register into memory
+- move memory into register
+- move directly into memory
+- can be used as padding. (nop, no operation)
+	- 2 byte NOP:
+		mov al, al OR mov eax, eax
+	- 3 byte NOP:
+		mov ax, ax OR mov rax, rax
+example:
+
+.data
+bit db 7
+mem db 14
+
+.code
+function proc 
+	mov rax, 89
+	mov cx, ax
+	mov bit, cl (legal, moves register into memory)
+	mov al, bit (legal, move memory into register)
+	mov mem, bit (ILLEGAL, memory to memory
+	mov mem, 19 (legal, move directly into memory.)
+	mov rax, rax (multibite, two changes instruction pointer)
+	mov al, al (two byte nop)
+
+load effective address: LEA
+used to load an address, if you have a variable, you can load the address of it into a register and manipulate the data indirectly with the register as a pointer. it does not change any flags.
+
+format:
+lea dest, src
+
+LEA is for arithmetic instruction, it computes an SIB address.
+
+changing the variable indirectly can be done through:
+
+lea rax, myByte
+mov byte ptr [rax], 7 (this will move 7 into whatever address the rax register is pointing to.)
+
+example:
+
+.data
+mem db 56 (this is a number addressing RAM)
+
+.code
+function proc
+	mov al, mem (will move 56 into register)
+	lea al, mem (will move the ADDRESS of mem which contains 56 into the register)
+
+*****BASIC ARITHMETIC:
+ADD SUB INC DEC
+add, subtract, increment and decrement
+
+ADD, adds two operands together and store the result in the first one.
+works for signed and unsigned arithmetic depending on how the flags are red.
+the Overflow flag indicates a signed carry, the carry flag indicates unsigned carry.
+possible flags: overflow, carry, sign, zero, auxiliary carry, parity. LOCK
+
+add reg/mem, reg/mem/imm
+
+example:
+
+.code
+function proc
+	mov rax, 5
+	lea rcx, 12
+	add rax, rcx (adds src to dst, rcx to rax, which changes rax' value to 17)
+
+Notes on using ADD:
+- using the original registers, EAX, CX, BL, etc. generates more efficient machine code than using the new ones, R8B, R12W etc. The new registers and 64 bit instructions add a REX prefix in machine code.
+- ADD reg, 0 can be used to update flags according to the reg without changing it. this is similar to AND reg, reg and OR reg, reg. They are slightly different to CMP reg, reg since CMP sets the flags as SUB reg, reg.
+- ADD reg, 1 can be used if you need to INC reg. This affects the carry flag.
+- ADD is faster than the multiplication instruction, therefore, to double a reg, you can use ADD ax, ax. it's more common to use shifts for this purpose.
+
+Sign extension:
+ADD sign extends an immediate operand when the operands are not of the same size. This only matters if the destination is 64 bits but there is no ADD reg64, imm64.
+when its destination is 64 bites, the immediate is always read as 32 bbits, it will be sign extended so if the 31st bit is a 1, you will get a negative result.
+ie.
+ADD RCX, MAX_INT becomes add rcx, fffffff8000000h
+if you need to add a64 intermediate to a reg or mem you have to use an intermediate MOV:
+
+mov rax, MAX_INT
+add rcx, rax
+
+SUB, subtracts the second operand fromt he first and stores the result in the first.
+format:
+sub reg/mem, reg/mem/imm
+
+overflow flag indicates a signe borrow, carry flag indicates unsigned.
+
+Flags: overflow, carry, sign, zero, auxiliary carry, pary.
+LOCK is supported.
+
+same as ADD.
+
+tricks:
+- similarly to ADD, it extends a 32 bit immediate, therefore, you need to use MOV if you are subtracting a 64 bit intermediate.
+- a quick way to get to zero is:
+	sub reg, reg OR xor reg, reg. the XOR method is more common for this purpose.
+- sub x, 1 can be used to achieve a DEC x, which affects the carry flag.
+- ADD and SUB can be used together to perform a swap. Similarly to a XOR swap, however XCHG instruction is faster and easier to read.
+
+INC, increments destination by 1.
+format
+
+inc reg/mem
+
+flags: overflow, sign, zero, auxiliary and parity. LOCK is supported. CARRY is not supported.
+normally if there's an unsigned overflow, the carry flag is set. However with INC that doesn't happen. to set the carry flag, use:
+add.
+add reg/mem, 1.
+INC is 3 bytes whereas ADD is 4 bytes and the same speed as ADD, so you can use either unless you really need it to be as small as possible.
+
+DEC has similar characteristics and also does not alter the Carry flag.
+format
+dec reg/mem
+
+***BOOLEAN LOGIC INSTRUCTIONS***
+AND mem/reg, mem/reg/imm
+OR mem/reg, mem/reg/imm
+NOT mem/reg (flips bits)
+XOR mem/reg, mem/reg/imm
+
+truth table, for AND:
+
+A	B	output
+0	0	0
+0	1	0
+1	0	0
+1	1	1
+
+example:
+
+TestFunction proc
+	move eax,	1001100010011b (b stands for binary constant)
+	mov ecx,	1001000010010b 
+	and eax, ecx
+	ret
+this results in output 1001000010010 as it performs AND several times
+
+OR: in the event of OR, the output is true if one or more bits are 1
+the output will look like:
+A	B	output
+0	0	0
+0	1	1
+1	0	1
+1	1	1
+				1001100010011
+
+XOR: if not equal, then 1
+A	B	output
+0	0	0
+0	1	1
+1	0	1
+1	1	0
+
+NXOR: equals the bits, XOR and then NOT
+A	B	output
+0	0	1
+0	1	0
+1	0	0
+1	1	1
+
+NOR: Done by OR and then NOT
+A	B	output
+0	0	1
+0	1	0
+1	0	0
+1	1	0
+
+NAND: and but flipped. Done by first AND and then NOT.
+NANDing the same result is the same as NOT
+A	B	output
+0	0	1
+0	1	1
+1	0	1
+1	1	0
+
+***BIT SHIFTING, ROTATING AND MANIPULATION***
+- SHIFTS instructions move the bits in the registers or RAM as though they are bit strings, written from left to right with the most significant bit on the left. 
+- ROTATIONS are similar to shifts, only the bits re-enter on the opposite side as they leave.
+
+instructions:
+SHL/SHR: shift left (SHL) or shift right (SHR) the same thing (lead to identical machine code), assemblers allow two mnemonics but there is only one instruction.
+instruction		Machine code
+SHL eax, 1		D1 E0
+SAL eax, 1		D1 E0
+
+the carry flag holds the very first bit that shifts out.
+
+You can't shift 32 and 64 bits. 16 are ok though.
+
+use CL if you want to shift by a variable amount.
+
+SHR/SHL can be used for divisions of unsigned numbers
+
+SAR/SAL: shift arithmatic right or left. which helps with division of signed numbers. SAL is the same as SHR though.
+
+shifting by 0 is a NO-OP, nothing happens and no flags are updated either.
+
+ROR/ROL: Rotate right/left
+same as shit instruction were mem/reg is allowed, and cl must be used for var.
+Rotate resembles shift but the bits come back in on the other side once they get moved out. a rotate also includes a Carry Flag that turns to 1 if the 1 gets rotated out.
+
+RCR/RCL: Rotate right/left through the carry flag.
+same as ROR and ROL but adds an extra bit through the carry flag. After it's rotated from the carry it goes back in. so it's like 65 bits.
+
+SHRD/SHLD: Double precision shifts.
+shrd rax, rbx, 12
+rax is placed beside rbx and rbx gets shifted into rax. rbx does not change. It's like a mov with bits wide percision
+
+**FLAGS REGISTER***
+carry flag: bit 0, set to 1 when there's an overflow. can use clc to clear the carry flag to 0
+Parity flag: bit 2, about data integrity, was pre VSC, indicates odd or even number of 1 bits. not used much
+auxilary tag: overflow at low 4 bits (called a nibble) not used much
+zero flag: bit 6. tells you if your result is 0
+sign flag: if your anwer was negative (1) or positive (0).
+direction flag: reading strings forwards (0) or backwards (1) (std), (cld) clear, reads upwards
+
+pushfq/popfq is how you push and pop flags.
+
+***Conditional Jumps, moves and set byte***
+
+jcc: conditional jump
+jcc rel8/16/32
+if the condition cc is true, then the IP will jump to the position specified by the relative offset. otherwise IP will fall through to next instruction.
+In practice we supply a label (an operand) and the Assembler converts it to the RIP relative address
+
+movcc: conditional move
+cmovcc reg, reg/mem
+if cc is true, the value of the second operand is moved into the first. otherwise the first is unchanged. There are no 8 bit versions of these instructions. the 32bit versions will zero the upper 32.
+
+setcc: set byte
+setcc reg/mem8
+if cc is true the value 1 is moved into the operand, otherwise 0 is moved.
+only 8bit operands are allowed.
+
+condition codes: (J stands for jump, can use CMOV or SET in place of J for conditional moves and set byte.) there are different ways to do the same instruction.
+JO: overflow
+JNO: not overflow
+JB/JC/JNAE: Carry unsigned
+JNB/JNC/JAE: Not carry unsigned
+JE/JZ: zero
+JNE/JNZ: not zero
+JBE/JNA: Below or unequal unsigned
+JNBE/JA: Above unsigned
+JS: Sign
+JNS: not sign
+JP/JPE: Parity even
+JNP/JPO: Parity odd
+JL/JNGE: less signed
+JNL/JGE: not less signed
+JLE/JNG: not greater signed
+JNLE/JG: greater signed
+
+how to use mov:
+
+	push rbx ; you can't change rbx so you have to push it.
+	mov ebx, 67
+	mov eax, -1
+	add eax, 1
+	cmovc eax, ebx ; if overflow is true, move ebx into eax
+	pop rbx;
+
+loop in assembly:
+	push rbx
+
+	mov rcx, 10 ; put number of loops in rcx or whatever register you want
+
+LoopHead:
+	; body of loop
+	dec rcx ; when rcx reaches zero it stops.
+	jnz LoopHead
+
+	pop rbx
+
+set byte instruction:
+	push rbx
+	mov eax, 10
+	mov ecx, 5
+	cmp eax, ecx
+	sete al ; set equals al, 10 in eax, 5 in ecx, compare eax to ecx if equal al will be 1, if not equal 0. for set not equal: setne or setnz
+
+for above and below: used for unsigned data. Keep in mind, your checking if the first operand is above/below the second.
+	push rbx
+	mov rax, 78
+	mov rbx, 90
+	cmp rax, rbx ; checks if 78 is above 90.
+	jb WasBelow
+	ja WasAbove
+
+WasBelow:
+	pop rbx
+	ret
+
+WasAbove:
+	pop rbx
+	ret
+
+	ret
+
+Sign code:
+	push rbx
+	mov rbx, 100
+	mov rax, 50
+	mov rcx, 90
+	sub rax, rcx
+	cmovs rax, rbx ; if the last instruction was negative rbx gets moved into rax. cmovns (if not negative)
+
+	pop rbx
+	ret
+
+signed conditions:
+	push rbx
+	mov eax, -9
+	mov ecx, 100
+	cmp eax, ecx
+	setg bl ; if eax is smaller than ecx bl will be set to 0 otherwise 1
+	setl bl ; if eax is less than 100, bl will be set to 1
+	setle bl ; (less or equal)
+	setge bl ; greater or equal
+	pop rbx
+	ret
+
+***DIVISION WITH THE DIV AND IDIV INSTRUCTIONS
+
+DIV: unsigned division
+IDIV: signed division.
+
+div reg/mem
+
+example:
+	push rbx
+	mov ax, 50
+	mov bl, 10
+
+	div bl ; divides AX by BL and stores the result in AL and the remainder in AH
+	pop rbx
+	ret
+
+dividing >=16 bits: compound register created by joining together RDX (top bits) and RAX (lower bits)
+	push rbx
+	mov ax, 50
+	xor dx, dx ;because 50 does not require more bits
+	mov cx, 3
+
+	div cx ; divides AX by CX and stores the result in AX and the remainder in DX
+	pop rbx
+	ret
+
+dividing >=32 bits: compound register created by joining together EDX (top bits) and EAX (lower bits)
+	push rbx
+	mov eax, 7871
+	xor edx, edx
+	mov ecx, 78
+
+	div ecx ; divides EAX by ECX and stores the result in EAX and the remainder in EDX
+	pop rbx
+	ret
+
+dividing >=64 bits: compound register created by joining together RDX (top bits) and RAX (lower bits)
+	push rbx
+	mov rax, 7871
+	xor rdx, 4
+	mov rbx, 1238
+
+	div rbx ; divides RAX by RBX and stores the result in RAX and the remainder in RDX
+	pop rbx
+	ret
+
+GCD: greatest common divisor. Euclidean's algorithm in assembly
+greatest common divisor between X and Y is the same as the greatest common divisor between X%Y and Y. 
+
+in c++:
+while (y != 0)
+{
+	int tmp = y;
+	y = x % y;
+	x = tmp;
+}
+return x;
+
+in assembly:
+GCD_ASM proc
+	mov rax, 0 ; error value
+	cmp rcx, 0
+	je Finished
+	cmp rdx, 0
+	je Finished
+
+	push rbx
+	mov rbx, rdx ; free rdx
+LoopHead:
+	xor rdx, rdx ; clear rdx
+	mov rax, rcx ; move lower 64 bits of dividend
+	div rbx 		; rdx will be remainder
+	mov rcx, rbx	; copy x to y
+	mov rbx, rdx	; copy remainder to rbx
+	cmp rdx, 0
+	jne LoopHead
+
+	mov rax, rcx
+
+	pop rbx
+Finished:
+	ret
+GCD_ASM endp
+
+***C Calling convention***
+*you may need to rewatch this one lol
+parameter passing, windows "C" Calling convention
+
+param	int			float/double		pointer/obj/array
+1st		RCX			XMM0				RCX
+2nd		RDX			XMM1				RDX
+3rd		R8			XMM2				R8
+4th		R9			XMM3				R9
+More	Stack		Stack				Stack
+
+if you create a function that passes a parameter into assembly, the first param will be stored in rcx, 2nd will be put in rdx, etc etc.
+ints and pointers/objs/arrays will be passed the same way, however floats are stored in XMM registers.
+
+***control structures***
+if statements, do while, while and for loops.
+If statements:
+testfunction proc
+	push rbx
+	mov eax, 5
+	mov ebx, 7
+	mov ecx, 0
+	cmp eax, ebx
+	jl eaxlower ;if eax is lower than ebx, jump to that function
+	jmp Finished
+
+eaxless:
+	mov ecx, 1 ; sets ecx to 1
+
+finished:
+
+	pop rbx
+	ret
+testfunction endp
+end
+
+it's very costly to use these because the cpu will try to execute ahead of time. Instead perform a conditional move, this is safer and recommended practice. conditional moves can be used for multiple statements too.
+
+; if x < y
+testfunction proc
+	push rbx
+	mov eax, 5
+	mov ebx, 7
+	mov ecx, 0
+	mov edx, 1
+	cmp eax, ebx
+	cmovl ecx, edx ; move edx into ecx if ebx is lower than ebx.
+
+	pop rbx
+	ret
+testfunction endp
+end
+
+ifs with multiple conditions:
+
+If statements:
+
+; int a = 5
+; int b = 7
+; int c = 0
+; if (a < b && a == 10)
+; 	c = 1;
+
+testfunction proc
+	push rbx
+	mov eax, 5
+	mov ebx, 7
+	mov ecx, 0 ; result of both conditions
+	mov r8d, 0 ; for the second condition a == 10, cmovxx only takes registers and ram so you have to set the value you want to cmov into a register.
+	mov edx, 1
+	cmp eax, ebx
+	cmovl ecx, edx ; move 1 into ecx if A < B
+	cmp r8d, 10
+	cmove r8d, edx ; move 1 into r8d if A == 10
+	and ecx, r8d
+	pop rbx
+	ret
+end
+
+while loop:
+
+; while (i < 5)
+; {
+;	i++;
+; };
+
+testfunction proc
+	mov eax, 0 ;eax is i
+
+	cmp eax, 5
+	jge Finished
+
+LoopHead:
+	; body of the while loop
+	inc eax ; eax++
+	cmp eax, 5
+	jl Loophead
+
+Finished:
+	ret
+end
+
+do while loop:
+; do
+; {
+;	i++;
+; } while (i < 5);
+; condition will always be executed at least once.
+; in assembly the initial check is removed. So you can have varying starting and stopping conditions in assembly.
+
+testfunction proc
+	mov eax, 0 ;eax is i
+
+LoopHead:
+	; body of the while loop
+	inc eax ; eax++
+	cmp eax, 5
+	jl Loophead
+
+Finished:
+	ret
+end
+
+regular assembly loop:
+similar to do while, but you count backwards to zero. This is the most common assembly loop
+
+basic:
+testfunction proc
+	mov ecx, 5 ;eax is i
+
+LoopHead:
+	; body of the while loop
+	dec ecx 
+	jnz Loophead
+
+Finished:
+	ret
+end
+
+
+the simple assembly loop used as a counter through array index.
+testfunction proc
+	mov ecx, 5 ;eax is i
+	mov  rax, [some array pointer] ; base
+	xor rdx, rdx ; the offset
+
+LoopHead:
+	; body of the while loop
+	add dword ptr [rax+rdx], 1 ; outerloop that counts through the number of elements in the array 
+	add rdx, 4 ; and a pointer of rax+rdx that counts upwards in 4s which is the size of a dword
+	dec ecx 
+	jnz Loophead
+
+Finished:
+	ret
+end
+
+a for loop:
+testfunction proc
+	mov eax, 0 ;eax is i
+
+	cmp eax, 10
+	jge Finished
+
+LoopHead:
+	; body of the while loop
+	inc eax 
+	cmp eax, 10
+	jl Loophead
+
+Finished:
+	ret
+end
+
+***Structures in ASM and C++***
+Many assemblers include structure functionality to organise code.
+
+Declaration of a structure in assembly:
+
+structure name	struct keyword, or struc
+Point			struct
+	x dd ? ;data, define dword, ? means it doesn't matter how it's initialised.
+	y dd ? ;data
+Point	ends
+		ENDS close structure
+
+define a structure:
+MyPoint	Point	{0, 0} ;values in {}
+
+in an environement:
+Point			struct
+	x dd ? 
+	y dd ? 
+Point	ends
+
+myPoint	Point	{0, 0}
+
+.code
+SomeFunction proc
+	mov	myPoint.y, 100 ; moves 100 into mypoint y.
+	mov [rcx].point.x, 100 ; you can also pass pointers
+
+	ret
+
+by defautl many cpp compilers align data so the offset within the structures adre divisible by the datasize.
+struct Mystruct
+{
+	char c; // offset 0
+	int i; //offset 4
+	short s; // offset 8
+	double d; // offset 16
+}; // total: 24 bytes!
+
+padding has to manually be added to assembly code.
+
+MyStruct	struct
+	c db ? ; defines a byte
+		db 3 dup(0) ; padding, adds 0s
+	i dd ?
+	s dw ?
+		db 6 dup(0) ; padding
+	d real8 ?
+MyStruct ends
+
+in cpp you can use:
+#pragma pack(1) to pack data the same as asm.
+struct Mystruct
+{
+	char c; // offset 0
+	int i; //offset 1
+	short s; // offset 5
+	double d; // offset 7
+}; // total: 15 bytes
+
+which is equivalent to the assembly:
+MyStruct	struct
+	c db ? ; defines a byte
+	i dd ?
+	s dw ?
+	d real8 ?
+MyStruct ends
+
+by default no extra padding is added.
+
+Classes in cpp are the same as structures in asm. asm does not care if classes are private or not,
+so you can change stuff with assembly.
+
+How to supply default values to assembly structs:
+Point struct
+	x dd 100
+	y dd 100
+Point ends
+
+point1 point {} ; uses default values
+point2 point { , 99} ;x is 100, y is 99
+point3 point { 0, 0 } ; both defaults have been overwritten
+
+Unions: same as structs but everything has the same address, so each element overwrites each other.
+union MyUnion				MyUnion union
+{								small db ?
+	char small;					medium dw ?
+	short medium;				large dd ?
+	int large;					huge dq ?
+	long long huge;				MyUnion ends
+};
+
+if you specify a union you only specify the first element, so only the low 8 bits / first member will be set.
+ie.
+
+pp MyUnion {0fffffffh}
+
+pp is an instance name.
+
+Accessing members in unions is the same as with structs.
+
+Nested Structures example:
+
+Point struct
+	x real4 ?
+	y real4 ?
+Point ends
+
+Line struct
+	startPoint Point {0.0, 0.0}
+	finishPoint Point {}
+Line ends
+
+Line1 Line { } ; defaults
+Line2 Line { \
+			{100.0, 89.0}, \ ; you must use slashes if you are going to use multiple lines.
+			{25.0, 78.0} \
+			}
