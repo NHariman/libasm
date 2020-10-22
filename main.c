@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 01:28:38 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/14 17:49:04 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/22 17:15:11 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,11 @@ void	test_strdup(void)
 	reset();
 	printf("[SYS]: [%s]\n", strdup("hello world!"));
 	printf("[ASM]: [%s]\n", ft_strdup("hello world!"));
+	// blue();
+	// printf("not a string!:\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strdup(123));
+	// printf("[ASM]: [%s]\n", ft_strdup(123));
 	blue();
 	printf("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n");
 	reset();

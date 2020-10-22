@@ -14,6 +14,7 @@ _ft_write:
 
 check_error:
 	push rax ; push original rax value for error
+	and rsp, - 16 ; force align stack
 	call ___error ; call errno, rax is set to errno address
 	mov rdi, rax ; move errno address into rdi
 	pop rax ; pop rax back to original error value
