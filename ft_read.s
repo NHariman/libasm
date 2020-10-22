@@ -12,8 +12,12 @@ _ft_read:
 
 check_error:
 	push rax ; push the value stored in rax
+	push rbp
+	mov rbp, rsp
 	and rsp, - 16 ; force align stack
 	call ___error ; set errno, moves this value into rax
+	mov rsp, rbp
+	pop rbp
 	mov rdi, rax ; move this value into rdi
 	pop rax ; pop original value, the error number from the syscall into rax
 	mov [rdi], rax ; move this value into the address or rdi
