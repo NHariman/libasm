@@ -7,11 +7,11 @@ section .text
 _ft_strlen:
 	xor rax, rax 			; sets rax to 0
 	cmp rdi, 0 				; checks if content of rdi, where the 1st argument is stored is empty (0)
-	je _end 			; if empty/equal to 0, jump to Finished
+	je _end 				; if empty/equal to 0, jump to Finished
 
 loophead:
 	cmp byte [rdi + rax], 0 ; checks if the content of rdi a NULL byte
-	je _end 			; done if true
+	je _end 				; done if true
 	inc rax 				; increment the counter
 	jmp loophead 			; loop back to the top of LoopHead
 

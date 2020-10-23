@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 01:28:38 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/22 17:15:11 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/23 12:33:37 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,30 +191,44 @@ void	test_read(void)
     int		readfd2;
     int		readfd;
     char	*buf;
+	char	*buf3;
+
+	// make two bufs, and strcmp
+	// to check if it's really reading the same thing
 
 	blue();
 	printf("*****ft_read*******\n");
 	reset();
-    buf = malloc(1000);
-    printf("\ntest 1: normal test\n");
+    buf = calloc(1000, sizeof(char));
+	buf3 = calloc(1000, sizeof(char));
+	blue();
+    printf("\nnormal test\n");
+	reset();
     readfd1 = open("ft_read.s", O_RDONLY);
     readfd2 = open("ft_read.s", O_RDONLY);
     readfd = read(readfd1, buf, 4);
     printf("   read:    read return: %d\n", readfd);
-    readfd = ft_read(readfd2, buf, 4);
+    readfd = ft_read(readfd2, buf3, 4);
     printf("ft_read: ft_read return: %d\n", readfd);
-    printf("\ntest 2: no real text\n");
+	printf("comparing buf and buf2: %i\n", strcmp(buf, buf3));
+	blue();
+    printf("\nno real text file\n");
+	reset();
     readfd = open("empty.txt", O_RDONLY);
     readfd = ft_read(readfd, buf, 4);
     printf("ft_read:    return read: %d\n", readfd);
     printf("   read: return ft_read: -1");
-    printf("\n\ntest 3: long text\n");
+	blue();
+    printf("\n\nlong text file\n");
+	reset();
     readfd = open("notes.txt", O_RDONLY);
     readfd1 = read(readfd, buf, 1000);
     printf("   read:    read return: %d\n", readfd);
     readfd2 = ft_read(readfd, buf, 1000);
     printf("ft_read: ft_read return: %d\n", readfd);
-    printf("\n\ntest 3: errno1\n");
+	blue();
+    printf("\n\nerrno1\n");
+	reset();
     char	buf1[21];
     char	buf2[21];
     int	a = read(333, buf1, 20);
@@ -222,7 +236,9 @@ void	test_read(void)
     int b = ft_read(333, buf2, 20);
 	perror("ft_read errno");
     perror("   read errno");
-    printf("\n\ntest 4: errno2\n");
+	blue();
+    printf("\n\nerrno2\n");
+	reset();
     printf("return ft_read = %d\n", b);
     printf("return    read = %d\n", a);
 }
@@ -259,11 +275,9 @@ void	test_write(void)
 	reset();
 	printf("[SYS]: [%zi]\n", write(fd, sys, count));
 	printf("[ASM]: [%zi]\n", ft_write(fd, asem, count));
-	// fd = open("test.txt", O_RDWR | O_CREAT | O_APPEND);
-	// fd2 = open("test2.txt", O_RDWR | O_CREAT | O_APPEND);
-	// printf("[SYS]: [%i]\n", write(fd, sys, count));
-	// printf("[ASM]: [%i]\n", ft_write(fd2, asem, count));
-	
+	blue();
+	printf("\ncheck errno 1:\n");
+	reset();
 	char	s1[] = "lmao\n";
 
 	int a = write(1, s1, sizeof(s1));

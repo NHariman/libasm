@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 00:29:36 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/09 02:05:33 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/23 12:03:07 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 ** the main functions
 */
 
-ssize_t		ft_read(int fd, void *buf, size_t count);
-char		*ft_strdup(const char *s);
-ssize_t		ft_write(int fd, const void *buf, size_t count);
-int			ft_strcmp(const char *s1, const char *s2);
-char		*ft_strcpy(char *dst, char *src);
-size_t		ft_strlen(const char *s);
+extern ssize_t		ft_read(int fd, void *buf, size_t count);
+extern char			*ft_strdup(const char *s);
+extern ssize_t		ft_write(int fd, const void *buf, size_t count);
+extern int			ft_strcmp(const char *s1, const char *s2);
+extern char			*ft_strcpy(char *dst, char *src);
+extern size_t		ft_strlen(const char *s);
 
 /*
 ** the functions used to make a pretty main for testing
