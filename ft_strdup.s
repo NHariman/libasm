@@ -23,5 +23,4 @@ _ft_strdup:
 	ret 				; return the destination string.
 
 _error:
-	mov rax, 0
 	ret

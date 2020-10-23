@@ -5,18 +5,18 @@ section .text
 ; size_t ft_strlen(char *str)
 
 _ft_strlen:
-	xor rax, rax ; sets rax to 0
-	cmp rdi, 0 ; checks if content of rdi, where the 1st argument is stored is empty (0)
-	je Finished ; if empty/equal to 0, jump to Finished
+	xor rax, rax 			; sets rax to 0
+	cmp rdi, 0 				; checks if content of rdi, where the 1st argument is stored is empty (0)
+	je _end 			; if empty/equal to 0, jump to Finished
 
-LoopHead:
+loophead:
 	cmp byte [rdi + rax], 0 ; checks if the content of rdi a NULL byte
-	je Finished ; done if true
-	inc rax ; increment the counter
-	jmp LoopHead ; loop back to the top of LoopHead
+	je _end 			; done if true
+	inc rax 				; increment the counter
+	jmp loophead 			; loop back to the top of LoopHead
 
-Finished:
-	ret ; return rax
+_end:
+	ret 					; return rax
 
 ; the explanation
 ; set rax to 0 as increment counter

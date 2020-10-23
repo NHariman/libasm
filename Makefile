@@ -6,7 +6,7 @@
 #    By: nhariman <nhariman@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/10/09 00:43:23 by nhariman      #+#    #+#                  #
-#    Updated: 2020/10/14 17:54:55 by nhariman      ########   odam.nl          #
+#    Updated: 2020/10/23 11:56:31 by nhariman      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ all: $(NAME)
 
 $(NAME): $(ONASM)
 	ar rcs $@ $^
+	$(COMPILE) $(FLAGS) -L. -lasm main.c -o asm_tester
 
 %.o: %.s
 	nasm -fmacho64 $< -o $@
