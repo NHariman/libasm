@@ -14,14 +14,16 @@ _ft_write:
 
 check_error:
 	push rax 			; push original rax value for error
-	push rbp
-	mov rbp, rsp
-	and rsp, - 16 		; force align stack
+	push rbp			; push base of stackframe
+	mov rbp, rsp		; move stackpointer into base of stackframe
+	and rsp, - 16 		; force align stack*
 	call ___error 		; call errno, rax is set to errno address
 	mov rsp, rbp
-	pop rbp
+	pop rbp				; restore base of stackframe
 	mov rdi, rax 		; move errno address into rdi
 	pop rax 			; pop rax back to original error value
 	mov [rdi], rax 		; move said value into rdi
 	mov rax, -1 		; change rax return to -1
 	ret
+
+	; *x86 calling convention “the stack must be aligned to a 16-byte boundary when calling a function

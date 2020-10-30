@@ -6,8 +6,6 @@ section .text
 
 _ft_strlen:
 	xor rax, rax 			; sets rax to 0
-	cmp rdi, 0 				; checks if content of rdi, where the 1st argument is stored is empty (0)
-	je _end 				; if empty/equal to 0, jump to Finished
 
 loophead:
 	cmp byte [rdi + rax], 0 ; checks if the content of rdi a NULL byte

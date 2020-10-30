@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 01:28:38 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/23 12:33:37 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/10/30 21:31:54 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ void	test_strlen(void)
 {
 	blue();
 	printf("*****ft_strlen*******\n");
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("NULL:\n");
+	// reset();
+	// printf("[SYS]: [%lu]\n", strlen(NULL));
+	// printf("[ASM]: [%lu]\n", ft_strlen(NULL));
 	printf("\"\":\n");
 	reset();
 	printf("[SYS]: [%lu]\n", strlen(""));
@@ -59,6 +65,27 @@ void test_strcmp(void)
 	blue();
 	printf("*****ft_strcmp*******\n");
 	reset();
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: NULL:\n");
+	// printf("s2: test:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp(NULL, "test"));
+	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, "test"));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: test:\n");
+	// printf("s2: NULL:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp("test", NULL));
+	// printf("[ASM]: [%i]\n", ft_strcmp("test", NULL));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: NULL:\n");
+	// printf("s2: NULL:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp(NULL, NULL));
+	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, NULL));
 	blue();
 	printf("s1: test:\n");
 	printf("s2: test:\n");
@@ -110,6 +137,43 @@ void	test_strcpy(void)
 	blue();
 	printf("*****ft_strcpy*******\n");
 	reset();
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("NULL\n\n");
+	// printf("s2: buff:\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strcpy(NULL, "buff"));
+	// printf("[ASM]: [%s]\n", ft_strcpy(NULL, "buff"));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("str1 is malloced with size 30\n\n");
+	// printf("s2: NULL\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strcpy(str, NULL));
+	// printf("[ASM]: [%s]\n", ft_strcpy(str, NULL));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("NULL\n\n");
+	// printf("s2: NULL\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strcpy(NULL, NULL));
+	// printf("[ASM]: [%s]\n", ft_strcpy(NULL, NULL));
+	//uncomment to check for the propper error, run full, then comment out the [SYS], in both cases the program should return the error:
+	// illegal hardware instruction
+	// blue();
+	// printf("s1: test\n");
+	// printf("s2: test\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strcpy("test", "test"));
+	// printf("[ASM]: [%s]\n", ft_strcpy("test", "test"));
+	//uncomment to check for the propper error, run full, then comment out the [SYS], in both cases the program should return the error:
+	// bus error
+	// blue();
+	// printf("s1: test\n");
+	// printf("s2: testdfdfd\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strcpy("test", "testdfdfd"));
+	// printf("[ASM]: [%s]\n", ft_strcpy("test", "testdfdfd"));
 	blue();
 	printf("str1 is malloced with size 30\n\n");
 	printf("s2: buff:\n");
@@ -158,6 +222,12 @@ void	test_strdup(void)
 	blue();
 	printf("*****ft_strdup*******\n");
 	reset();
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("NULL:\n");
+	// reset();
+	// printf("[SYS]: [%s]\n", strdup(NULL));
+	// printf("[ASM]: [%s]\n", ft_strdup(NULL));
 	blue();
 	printf("\"\":\n");
 	reset();
@@ -173,11 +243,6 @@ void	test_strdup(void)
 	reset();
 	printf("[SYS]: [%s]\n", strdup("hello world!"));
 	printf("[ASM]: [%s]\n", ft_strdup("hello world!"));
-	// blue();
-	// printf("not a string!:\n");
-	// reset();
-	// printf("[SYS]: [%s]\n", strdup(123));
-	// printf("[ASM]: [%s]\n", ft_strdup(123));
 	blue();
 	printf("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n");
 	reset();
@@ -337,7 +402,10 @@ void	print_instructions(void)
 int		main(int argc, char **argv)
 {
 	if (argc < 2)
+	{
 		print_instructions();
+		return (0);
+	}
 	else if (argc == 2 && !strcmp(argv[1], "strlen"))
 		test_strlen();
 	else if (argc == 2 && !strcmp(argv[1], "read"))
@@ -357,5 +425,8 @@ int		main(int argc, char **argv)
 		printf("command not recognised\n");
 		print_instructions();
 	}
+	printf("infinite while loop to check for leaks\n");
+	while (1)
+	{;}
 	return (0);
 }
