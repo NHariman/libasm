@@ -6,7 +6,7 @@
 /*   By: nhariman <nhariman@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/09 01:28:38 by nhariman      #+#    #+#                 */
-/*   Updated: 2020/10/30 21:31:54 by nhariman      ########   odam.nl         */
+/*   Updated: 2020/11/03 13:50:39 by nhariman      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ void	test_strlen(void)
 {
 	blue();
 	printf("*****ft_strlen*******\n");
+	reset();
 	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
 	// blue();
 	// printf("NULL:\n");
 	// reset();
 	// printf("[SYS]: [%lu]\n", strlen(NULL));
 	// printf("[ASM]: [%lu]\n", ft_strlen(NULL));
+	blue();
 	printf("\"\":\n");
 	reset();
 	printf("[SYS]: [%lu]\n", strlen(""));
@@ -65,27 +67,6 @@ void test_strcmp(void)
 	blue();
 	printf("*****ft_strcmp*******\n");
 	reset();
-	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
-	// blue();
-	// printf("s1: NULL:\n");
-	// printf("s2: test:\n");
-	// reset();
-	// printf("[SYS]: [%i]\n", strcmp(NULL, "test"));
-	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, "test"));
-	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
-	// blue();
-	// printf("s1: test:\n");
-	// printf("s2: NULL:\n");
-	// reset();
-	// printf("[SYS]: [%i]\n", strcmp("test", NULL));
-	// printf("[ASM]: [%i]\n", ft_strcmp("test", NULL));
-	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
-	// blue();
-	// printf("s1: NULL:\n");
-	// printf("s2: NULL:\n");
-	// reset();
-	// printf("[SYS]: [%i]\n", strcmp(NULL, NULL));
-	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, NULL));
 	blue();
 	printf("s1: test:\n");
 	printf("s2: test:\n");
@@ -128,25 +109,47 @@ void test_strcmp(void)
 	reset();
 	printf("[SYS]: [%i]\n", strcmp("\0", "test"));
 	printf("[ASM]: [%i]\n", ft_strcmp("\0", "test"));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: NULL:\n");
+	// printf("s2: test:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp(NULL, "test"));
+	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, "test"));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: test:\n");
+	// printf("s2: NULL:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp("test", NULL));
+	// printf("[ASM]: [%i]\n", ft_strcmp("test", NULL));
+	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
+	// blue();
+	// printf("s1: NULL:\n");
+	// printf("s2: NULL:\n");
+	// reset();
+	// printf("[SYS]: [%i]\n", strcmp(NULL, NULL));
+	// printf("[ASM]: [%i]\n", ft_strcmp(NULL, NULL));
 }
 
 void	test_strcpy(void)
 {
 	char *str = malloc(30);
+	char *str5 = malloc(30);
 
 	blue();
 	printf("*****ft_strcpy*******\n");
 	reset();
 	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
 	// blue();
-	// printf("NULL\n\n");
+	// printf("s1: NULL\n");
 	// printf("s2: buff:\n");
 	// reset();
 	// printf("[SYS]: [%s]\n", strcpy(NULL, "buff"));
 	// printf("[ASM]: [%s]\n", ft_strcpy(NULL, "buff"));
 	//uncomment to check for the NULL segfault, run full, then comment out the [SYS], in both cases the program should segfault.
 	// blue();
-	// printf("str1 is malloced with size 30\n\n");
+	// printf("str1 is malloced with size 30\n");
 	// printf("s2: NULL\n");
 	// reset();
 	// printf("[SYS]: [%s]\n", strcpy(str, NULL));
@@ -158,14 +161,6 @@ void	test_strcpy(void)
 	// reset();
 	// printf("[SYS]: [%s]\n", strcpy(NULL, NULL));
 	// printf("[ASM]: [%s]\n", ft_strcpy(NULL, NULL));
-	//uncomment to check for the propper error, run full, then comment out the [SYS], in both cases the program should return the error:
-	// illegal hardware instruction
-	// blue();
-	// printf("s1: test\n");
-	// printf("s2: test\n");
-	// reset();
-	// printf("[SYS]: [%s]\n", strcpy("test", "test"));
-	// printf("[ASM]: [%s]\n", ft_strcpy("test", "test"));
 	//uncomment to check for the propper error, run full, then comment out the [SYS], in both cases the program should return the error:
 	// bus error
 	// blue();
@@ -179,46 +174,62 @@ void	test_strcpy(void)
 	printf("s2: buff:\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, "buff"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "buff"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "buff"));
 	blue();
 	printf("s2: bink:\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, "bink"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "bink"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "bink"));
 	blue();
 	printf("s2: binkdffd:\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, "binkdffd"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "binkdffd"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "binkdffd"));
 	blue();
 	printf("s2: cat:\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, "cat"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "cat"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "cat"));
 	blue();
 	printf("s2: test:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy(str, "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "test"));
+	printf("[SYS]: [%s]\n", strcpy(str, "test1"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "test1"));
 	blue();
 	printf("s2: \"\":\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, ""));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, ""));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, ""));
 	blue();
 	printf("s2: \"\\0\":\n");
 	reset();
 	printf("[SYS]: [%s]\n", strcpy(str, "\0"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "\0"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "\0"));
 	blue();
 	printf("s2: test:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strcpy(str, "test"));
-	printf("[ASM]: [%s]\n", ft_strcpy(str, "test"));
+	char *str2 = malloc(30);
+	printf("[SYS]: [%s]\n", strcpy(str2, "test"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str5, "test"));
+	free(str);
+	free(str2);
+	char *str4 = malloc(5);
+	char *str3 = malloc(5);
+	blue();
+	printf("s1: str malloced 5\n");
+	printf("s2: testdfdfd\n");
+	reset();
+	printf("[SYS]: [%s]\n", strcpy(str4, "testdfdfd"));
+	printf("[ASM]: [%s]\n", ft_strcpy(str3, "testdfdfd"));
+	free(str4);
+	free(str3);
+	free(str5);
 }
 
 void	test_strdup(void)
 {
+	char *sys;
+	char *asem;
 	blue();
 	printf("*****ft_strdup*******\n");
 	reset();
@@ -231,23 +242,39 @@ void	test_strdup(void)
 	blue();
 	printf("\"\":\n");
 	reset();
-	printf("[SYS]: [%s]\n", strdup(""));
-	printf("[ASM]: [%s]\n", ft_strdup(""));
+	sys = strdup("");
+	asem = ft_strdup("");
+	printf("[SYS]: [%s]\n", sys);
+	printf("[ASM]: [%s]\n", asem);
+	free(sys);
+	free(asem);
 	blue();
 	printf("\"\\0\":\n");
 	reset();
-	printf("[SYS]: [%s]\n", strdup("\0"));
-	printf("[ASM]: [%s]\n", ft_strdup("\0"));
+	sys = strdup("\0");
+	asem = ft_strdup("\0");
+	printf("[SYS]: [%s]\n", sys);
+	printf("[ASM]: [%s]\n", asem);
+	free(sys);
+	free(asem);
 	blue();
 	printf("hello world!:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strdup("hello world!"));
-	printf("[ASM]: [%s]\n", ft_strdup("hello world!"));
+	sys = strdup("hello world!");
+	asem = ft_strdup("hello world!");
+	printf("[SYS]: [%s]\n", sys);
+	printf("[ASM]: [%s]\n", asem);
+	free(sys);
+	free(asem);
 	blue();
 	printf("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n");
 	reset();
-	printf("[SYS]: [%s]\n", strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n"));
-	printf("[ASM]: [%s]\n", ft_strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n"));
+	sys = strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n");
+	asem = ft_strdup("fkdalhfld;hfla;fhkdjfl;kdjflj49r784570wutkrthj8y(*^*(^&*^&*TY*HU(H&&^*TUIY*(Y*(UYuhfijdhafuh4hf98fhjhg9hrgjdhf9fhejh9ofhghrgohgijgk:\n");
+	printf("[SYS]: [%s]\n", sys);
+	printf("[ASM]: [%s]\n", asem);
+	free(sys);
+	free(asem);
 }
 
 void	test_read(void)
@@ -257,10 +284,6 @@ void	test_read(void)
     int		readfd;
     char	*buf;
 	char	*buf3;
-
-	// make two bufs, and strcmp
-	// to check if it's really reading the same thing
-
 	blue();
 	printf("*****ft_read*******\n");
 	reset();
@@ -272,25 +295,28 @@ void	test_read(void)
     readfd1 = open("ft_read.s", O_RDONLY);
     readfd2 = open("ft_read.s", O_RDONLY);
     readfd = read(readfd1, buf, 4);
-    printf("   read:    read return: %d\n", readfd);
+    printf("[SYS]: %d\n", readfd);
     readfd = ft_read(readfd2, buf3, 4);
-    printf("ft_read: ft_read return: %d\n", readfd);
+    printf("[ASM]: %d\n", readfd);
 	printf("comparing buf and buf2: %i\n", strcmp(buf, buf3));
+	free(buf);
+	free(buf3);
 	blue();
     printf("\nno real text file\n");
 	reset();
     readfd = open("empty.txt", O_RDONLY);
-    readfd = ft_read(readfd, buf, 4);
-    printf("ft_read:    return read: %d\n", readfd);
-    printf("   read: return ft_read: -1");
+	readfd1 = read(readfd, buf, 4);
+    readfd2 = ft_read(readfd, buf3, 4);
+    printf("[SYS]: %d\n", readfd1);
+    printf("[ASM]: %d\n", readfd2);
 	blue();
-    printf("\n\nlong text file\n");
+    printf("\nlong text file\n");
 	reset();
     readfd = open("notes.txt", O_RDONLY);
     readfd1 = read(readfd, buf, 1000);
-    printf("   read:    read return: %d\n", readfd);
-    readfd2 = ft_read(readfd, buf, 1000);
-    printf("ft_read: ft_read return: %d\n", readfd);
+    readfd2 = ft_read(readfd, buf3, 1000);
+    printf("[SYS]: %d\n", readfd1);
+    printf("[ASM]: %d\n", readfd2);
 	blue();
     printf("\n\nerrno1\n");
 	reset();
@@ -299,13 +325,13 @@ void	test_read(void)
     int	a = read(333, buf1, 20);
     errno = 100;
     int b = ft_read(333, buf2, 20);
-	perror("ft_read errno");
-    perror("   read errno");
+	perror("[SYS] errno");
+    perror("[ASM] errno");
 	blue();
     printf("\n\nerrno2\n");
 	reset();
-    printf("return ft_read = %d\n", b);
-    printf("return    read = %d\n", a);
+    printf("[SYS]: %d\n", a);
+    printf("[ASM]: %d\n", b);
 }
 
 void	test_write(void)
@@ -349,21 +375,21 @@ void	test_write(void)
 	int	b = ft_write(1, s1, sizeof(s1));
 	printf("%i\n%i\n", a, b);
     a = write(FOPEN_MAX + 1, "abcdefghijklmnopqrstuvwxyz\n", 27);
-	perror("write errno");
+	perror("[SYS]: errno");
 	errno = 0;
     b = ft_write(FOPEN_MAX + 1, "abcdefghijklmnopqrstuvwxyz\n", 27);
-	perror("ft_write errno");
-    printf("return write = %d\nreturn ft_write = %d\n", a, b);
+	perror("[ASM]: errno");
+    printf("[SYS]: %d\n[ASM]: %d\n", a, b);
 	int	test_fd = OPEN_MAX + 1;
 	if (test_fd > 2)
 	{
-		int c = ft_write(test_fd, "hatsssssss", 8);
+		int c = write(test_fd, "hatsssssss", 8);
 		if (c < 0)
-			perror("my write error");
-		int d = write(test_fd, "hatsssssss", 8);
+			perror("[SYS]: error");
+		int d = ft_write(test_fd, "hatsssssss", 8);
 		if (d < 0)
-			perror("real write error");
-		printf("hats mine: %d, real: %d\n", c, d);
+			perror("[ASM]: error");
+		printf("[SYS]: %d\n[ASM]: %d\n", c, d);
 	}
 }
 
@@ -375,12 +401,7 @@ void test_all(void)
 	reset();
 	test_strlen();
 	printf("\n");
-	// write
-	test_write();
-	printf("\n");
-	// read
-	test_read();
-	printf("\n");
+
 	// strcmp
 	test_strcmp();
 	printf("\n");
@@ -389,6 +410,12 @@ void test_all(void)
 	printf("\n");
 	// strdup
 	test_strdup();
+	printf("\n");	
+	// write
+	test_write();
+	printf("\n");
+	// read
+	test_read();
 	printf("\n");
 }
 
@@ -424,8 +451,9 @@ int		main(int argc, char **argv)
 	{
 		printf("command not recognised\n");
 		print_instructions();
+		return (0);
 	}
-	printf("infinite while loop to check for leaks\n");
+	printf("\n start infinite while loop for leaks check:\n");
 	while (1)
 	{;}
 	return (0);

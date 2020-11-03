@@ -18,7 +18,5 @@ _end:
 
 ; the explanation
 ; set rax to 0 as increment counter
-; compare if rdi exists, if not jump straight to finish and return 0
-; otherwise iterate through the string,
 ; compare each time if rdi is equal to 0 to check if you've reached the end
 ; if so, return rax. otherwise increment rax and keep going.
