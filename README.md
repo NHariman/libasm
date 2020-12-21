@@ -10,5 +10,5 @@
 <p>It can be compiled with C mains and other projects using:<br>
     <code>gcc -Wall -Werror -Wextra main.c -L. -lasm</code> OR <code>gcc -Wall -Werror -Wextra main.c libasm.a</code></p>
 <p>A tester main is available using:<br><code>./asm_tester</code></p>
-<p>Main is able to test one function at a time, or all of them at once.</p>
+<p><code>asm_tester</code> is able to test one function at a time, or all of them at once.</p>
 <p>Commands:<br><code>all | strlen | read | strcmp | strcpy | strdup | write</code></p>
